@@ -6,17 +6,19 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
 
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 import dayjs from 'dayjs';
 
-import 'dayjs/locale/de';
+import 'dayjs/locale/ru';
 
 import styled from "styled-components";
 
 import { TimeValidationProps } from '@mui/x-date-pickers/internals';
+
+import { DateTimeValidationProps } from '@mui/x-date-pickers/internals';
 
 type Item = {
   label: string;
@@ -45,7 +47,7 @@ const App = () => {
   const [label2, setLabel2] = useState('');
   const [label3, setLabel3] = useState('');
 
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState<Date>();
 
   return (
     <div className='App'>
@@ -77,14 +79,14 @@ const App = () => {
           ))
         }
       </Dropdown>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-        <DatePicker className='datePicker' onChange={(value: string | null) => setDate(value ? value : '')} />
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+        <DatePicker className='datePicker' onChange={(value: Date | null) => setDate(value ? value : date)} />
         <TimePicker className='timePicker' label="Время начала"
           defaultValue={dayjs('2022-04-17T15:30')} />
         <TimePicker className='timePicker' label="Время завершения"
           defaultValue={dayjs('2022-04-17T15:30')} />
       </LocalizationProvider>
-      <button onClick={() => console.log(typeof date)}>dsadad</button>
+      <button onClick={() => { console.log(date?.toJSON().slice(0, 10)) }}>dsadad</button>
       <footer style={{ display: 'flex', alignSelf: 'flex-end' }}>Суянов Алтан</footer>
     </div>
   )
