@@ -12,6 +12,8 @@ const Dropdown = (props: PropsWithChildren<Props>) => {
 
     const [isOpen, setOpen] = useState(false);
 
+    const [buttonText, setButtonText] = useState('');
+
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
     const handleOpen = () => (!isOpen ? setOpen(true) : setOpen(false));
@@ -33,45 +35,7 @@ const Dropdown = (props: PropsWithChildren<Props>) => {
     ), [items]);
 
 
-    const hadleKey = async (ev: KeyboardEvent) => {
-        switch (ev.code) {
-            case 'Enter': {
-                ev.preventDefault();
-                ev.stopPropagation();
-                const item = items[indexes[highlightedIndex]];
-                if (highlightedIndex !== -1 && isValidElement(item)) {
-                    handleChange(item.props.value);
-                }
-                break;
-            }
-            case 'ArrowDown':
-                ev.preventDefault();
-                ev.stopPropagation();
-                setHighlightedIndex(highlightedIndex => {
-                    const index = highlightedIndex === indexes.length - 1 ? 0 : highlightedIndex + 1;
-                    return index;
-                });
-                break;
-            case 'ArrowUp':
-                ev.preventDefault();
-                ev.stopPropagation();
-                setHighlightedIndex(highlightedIndex => {
-                    const index = highlightedIndex === 0 ? indexes.length - 1 : highlightedIndex - 1;
-                    return index;
-                });
-                break;
-        }
-    }
 
-    useEffect(() => {
-        if (isOpen) {
-            document.addEventListener('keydown', hadleKey, true);
-        }
-
-        return () => {
-            document.removeEventListener('keydown', hadleKey, true);
-        }
-    }, [isOpen]);
 
     const handleChange = (item: any) => {
         onChange(item);
@@ -79,8 +43,8 @@ const Dropdown = (props: PropsWithChildren<Props>) => {
     }
 
     return (
-        <div>
-            <button onClick={handleOpen} type='button'>{label}</button>
+        <Root>
+            <Control onClick={handleOpen} type='button'>{label}</Control>
             {
                 isOpen && (
                     <Menu>
@@ -98,17 +62,15 @@ const Dropdown = (props: PropsWithChildren<Props>) => {
                                             ref: (node: HTMLDivElement) => {
                                                 elements.current[index] = node;
                                             }
+
                                         });
-                                }
-                                else {
-                                    return child;
                                 }
                             })
                         }
                     </Menu>
                 )
             }
-        </div>
+        </Root>
     );
 
 };
@@ -125,7 +87,7 @@ const Root = styled.div``;
 
 const Control = styled.button`
   width: 100%;
-  margin: 0;
+  margin-top: 2%;
   padding: 0;
 `;
 
