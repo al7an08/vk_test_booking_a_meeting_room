@@ -19,6 +19,8 @@ import styled from "styled-components";
 import { TimeValidationProps } from '@mui/x-date-pickers/internals';
 
 import { DateTimeValidationProps } from '@mui/x-date-pickers/internals';
+import { start } from 'repl';
+
 
 type Item = {
   label: string;
@@ -48,6 +50,19 @@ const App = () => {
   const [label3, setLabel3] = useState('');
 
   const [date, setDate] = useState<Date>();
+
+  const [startTime, setStartTime] = useState(dayjs('1900-04-17T15:30'));
+  const [endTime, setEndTime] = useState(dayjs('1900-04-17T15:30'));
+
+  let data = {
+    tower: '',
+    floor: '',
+    meetingRoom: '',
+    date: date?.toJSON().slice(0, 10),
+    startTime: startTime?.toJSON().slice(10),
+    endTime: endTime?.toJSON().slice(10)
+  }
+
 
   return (
     <div className='App'>
@@ -82,11 +97,28 @@ const App = () => {
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
         <DatePicker className='datePicker' onChange={(value: Date | null) => setDate(value ? value : date)} />
         <TimePicker className='timePicker' label="Время начала"
-          defaultValue={dayjs('2022-04-17T15:30')} />
+          defaultValue={dayjs('2022-04-17T15:30')}
+          onChange={(value) => setStartTime(value ? value.add(3, 'hours') : startTime)} />
         <TimePicker className='timePicker' label="Время завершения"
-          defaultValue={dayjs('2022-04-17T15:30')} />
+          defaultValue={dayjs('2022-04-17T15:30')}
+          onChange={(value) => setEndTime(value ? value.add(3, 'hours') : endTime)} />
       </LocalizationProvider>
-      <button onClick={() => { console.log(date?.toJSON().slice(0, 10)) }}>dsadad</button>
+      <button onClick={() => {
+        data.tower = label1;
+        data.floor = label2;
+        data.meetingRoom = label3;
+        data.startTime = startTime?.toJSON().slice(11, 19);
+        data.endTime = endTime?.toJSON().slice(11, 19);
+
+        data.date = date?.toJSON().slice(0, 10);
+        if (data.tower && data.floor && data.meetingRoom && data.date && startTime.year() != 1900 && endTime.year() != 1900) {
+          console.log(JSON.stringify(data));
+          alert('Отправлено! Данные выведены в консоль в виде JSON');
+        }
+        else {
+          alert('Какое-то из полей не заполнено! Пожалуйста, проверьте правильность введённых данных');
+        }
+      }}>Отправить</button>
       <footer style={{ display: 'flex', alignSelf: 'flex-end' }}>Суянов Алтан</footer>
     </div>
   )

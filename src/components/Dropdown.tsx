@@ -53,7 +53,7 @@ const Dropdown = (props: PropsWithChildren<Props>) => {
                                 if (isValidElement(child)) {
                                     return cloneElement(child as ReactElement,
                                         {
-                                            active: index === indexes[highlightedIndex],
+                                            active: index === indexes[highlightedIndex] ? 1 : 0,
                                             onMouseEnter: () => setHighlightedIndex(indexes.indexOf(index)),
                                             onClick: (ev: MouseEvent) => {
                                                 ev.stopPropagation();
