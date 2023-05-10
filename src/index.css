@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #dbe7e7;
+  color: #000209;
+  font-size: large;
 }
 
 code {
@@ -16,9 +19,24 @@ code {
 .App {
   display: flex;
   flex-direction: column;
-  margin: 5%;
+  justify-content: center;
+  margin: 2%;
 }
 
 #Dropdown {
   margin: 10%;
+}
+
+.datePicker {
+  padding: 100px 20px 20px 20px;
+  width: 200px;
+  align-self: center;
+  background-color: #abd5d5;
+}
+
+.timePicker {
+  margin: 2%;
+  width: 200px;
+  align-self: center;
+  background-color: #abd5d5;
 }

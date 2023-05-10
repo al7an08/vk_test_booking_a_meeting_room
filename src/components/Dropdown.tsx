@@ -12,8 +12,6 @@ const Dropdown = (props: PropsWithChildren<Props>) => {
 
     const [isOpen, setOpen] = useState(false);
 
-    const [buttonText, setButtonText] = useState('');
-
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
     const handleOpen = () => (!isOpen ? setOpen(true) : setOpen(false));
@@ -78,17 +76,23 @@ const Dropdown = (props: PropsWithChildren<Props>) => {
 const Menu = styled.menu`
   margin: 1px 0 0;
   padding: 0;
-  border: 1px solid #bebebe;
+  border: 1px solid #717a7b;
   max-height: 100px;
   overflow-y: auto;
+  background-color: #abd5d5;
+  font-size: large;
 `;
 
 const Root = styled.div``;
 
 const Control = styled.button`
+  height: 50px;
   width: 100%;
   margin-top: 2%;
   padding: 0;
+  background-color: #abd5d5;
+  border-radius: 10px;
+  font-size: large;
 `;
 
 export default Dropdown

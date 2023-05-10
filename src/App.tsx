@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
@@ -16,10 +16,6 @@ import 'dayjs/locale/ru';
 
 import styled from "styled-components";
 
-import { TimeValidationProps } from '@mui/x-date-pickers/internals';
-
-import { DateTimeValidationProps } from '@mui/x-date-pickers/internals';
-import { start } from 'repl';
 
 
 type Item = {
@@ -27,7 +23,7 @@ type Item = {
   value: any;
 }
 
-const items: Item[] = [
+const towers: Item[] = [
   { label: 'Tower A', value: 'A' },
   { label: 'Tower B', value: 'B' },
 ];
@@ -39,9 +35,10 @@ function createItems(text: string, a: number, b: number): Item[] {
   }
   return array;
 }
-const items1: Item[] = createItems('Этаж', 3, 37);
+const floors: Item[] = createItems('Этаж', 3, 37);
 
-const items2: Item[] = createItems('Переговорная - номер ', 1, 10);
+const meetingRooms: Item[] = createItems('Переговорная - номер ', 1, 10);
+
 
 const App = () => {
 
@@ -49,18 +46,52 @@ const App = () => {
   const [label2, setLabel2] = useState('');
   const [label3, setLabel3] = useState('');
 
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState(dayjs(''));
 
-  const [startTime, setStartTime] = useState(dayjs('1900-04-17T15:30'));
-  const [endTime, setEndTime] = useState(dayjs('1900-04-17T15:30'));
+  const [startTime, setStartTime] = useState(dayjs(''));
+  const [endTime, setEndTime] = useState(dayjs(''));
 
-  let data = {
-    tower: '',
-    floor: '',
-    meetingRoom: '',
-    date: date?.toJSON().slice(0, 10),
-    startTime: startTime?.toJSON().slice(10),
-    endTime: endTime?.toJSON().slice(10)
+  const [comment, setComment] = useState('');
+
+  function storageAndShowData(): void {
+    if (label1 && label2 && label3 && date) {
+      if (endTime.diff(startTime) > 0) {
+        let data = {
+          tower: '',
+          floor: '',
+          meetingRoom: '',
+          comment: '',
+          date: '',
+          startTime: '',
+          endTime: ''
+        }
+        data.tower = label1;
+        data.floor = label2;
+        data.meetingRoom = label3;
+        data.startTime = startTime?.add(3, 'hours').toJSON().slice(11, 19);
+        data.endTime = endTime?.add(3, 'hours').toJSON().slice(11, 19);
+        data.comment = comment ? comment : 'Нет комментария'
+        data.date = date?.toJSON().slice(0, 10);
+        console.log(JSON.stringify(data));
+        alert('Отправлено! Данные выведены в консоль в виде JSON');
+      }
+      else {
+        alert('Время начала и/или завершения введено неверно! Пожалуйста, проверьте правильность введённых данных');
+      }
+    }
+    else {
+      alert('Какое-то из полей не заполнено! Пожалуйста, проверьте правильность введённых данных');
+    }
+  }
+  const handleClear = (e: any) => {
+    e.preventDefault()
+    setLabel1('');
+    setLabel2('');
+    setLabel3('');
+    setComment('');
+    setDate(dayjs(''));
+    setStartTime(dayjs(''));
+    setEndTime(dayjs(''));
   }
 
 
@@ -69,7 +100,7 @@ const App = () => {
       <Header> Выбор Переговорной</Header>
       <Dropdown label={label1 ? label1 : 'Выберите башню'} onChange={(item) => setLabel1(item.label)}>
         {
-          items.map(item => (
+          towers.map(item => (
             <MenuItem key={item.value} value={item}>
               {item.label}
             </MenuItem>
@@ -78,7 +109,7 @@ const App = () => {
       </Dropdown>
       <Dropdown label={label2 ? label2 : 'Выберите этаж'} onChange={(item) => setLabel2(item.label)}>
         {
-          items1.map(item => (
+          floors.map(item => (
             <MenuItem key={item.value} value={item}>
               {item.label}
             </MenuItem>
@@ -87,7 +118,7 @@ const App = () => {
       </Dropdown>
       <Dropdown label={label3 ? label3 : 'Выберите переговорную'} onChange={(item) => setLabel3(item.label)}>
         {
-          items2.map(item => (
+          meetingRooms.map(item => (
             <MenuItem key={item.value} value={item}>
               {item.label}
             </MenuItem>
@@ -95,41 +126,48 @@ const App = () => {
         }
       </Dropdown>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
-        <DatePicker className='datePicker' onChange={(value: Date | null) => setDate(value ? value : date)} />
-        <TimePicker className='timePicker' label="Время начала"
-          defaultValue={dayjs('2022-04-17T15:30')}
-          onChange={(value) => setStartTime(value ? value.add(3, 'hours') : startTime)} />
-        <TimePicker className='timePicker' label="Время завершения"
-          defaultValue={dayjs('2022-04-17T15:30')}
-          onChange={(value) => setEndTime(value ? value.add(3, 'hours') : endTime)} />
+        <DatePicker sx={{ margin: '10px' }} className='datePicker' value={date} onChange={(value) => setDate(value ? value : date)} />
+        <TimePicker sx={{ margin: '10px' }} className='timePicker'
+          label="Время начала"
+          defaultValue={startTime}
+          value={startTime}
+          onChange={(value) => setStartTime(value ? value : startTime)}
+        />
+        <TimePicker sx={{ margin: '10px' }} className='timePicker' label="Время завершения"
+          defaultValue={endTime}
+          value={endTime}
+          onChange={(value) => setEndTime(value ? value : endTime)} />
       </LocalizationProvider>
-      <button onClick={() => {
-        data.tower = label1;
-        data.floor = label2;
-        data.meetingRoom = label3;
-        data.startTime = startTime?.toJSON().slice(11, 19);
-        data.endTime = endTime?.toJSON().slice(11, 19);
-
-        data.date = date?.toJSON().slice(0, 10);
-        if (data.tower && data.floor && data.meetingRoom && data.date && startTime.year() != 1900 && endTime.year() != 1900) {
-          console.log(JSON.stringify(data));
-          alert('Отправлено! Данные выведены в консоль в виде JSON');
-        }
-        else {
-          alert('Какое-то из полей не заполнено! Пожалуйста, проверьте правильность введённых данных');
-        }
-      }}>Отправить</button>
-      <footer style={{ display: 'flex', alignSelf: 'flex-end' }}>Суянов Алтан</footer>
+      <TextArea value={comment} placeholder='Введите комментарий' onChange={(e) => { setComment(e.target.value) }}></TextArea>
+      <Button onClick={storageAndShowData}>Отправить</Button>
+      <Button onClick={handleClear}>Очистить</Button>
     </div>
   )
 }
 
+const StyledDatePicker = styled(DatePicker);
 
+const TextArea = styled.textarea`
+  align-self: center;
+  width: 50%;
+  height: 100px;
+`
 const Header = styled.header`
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 2%;
   padding: 0;
+  font-weight: 500;
 `;
+
+const Button = styled.button`
+  height: 100px;
+  width: 150px;
+  align-self: center;
+  margin: 1%;
+  border-radius: 10px;
+`
+
+
+
 export default App
