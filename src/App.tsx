@@ -42,9 +42,9 @@ const meetingRooms: Item[] = createItems('Переговорная - номер 
 
 const App = () => {
 
-  const [label1, setLabel1] = useState('');
-  const [label2, setLabel2] = useState('');
-  const [label3, setLabel3] = useState('');
+  const [towerLabel, setTowerLabel] = useState('');
+  const [floorLabel, setFloorLabel] = useState('');
+  const [meetingRoomLabel, setMeetingRoomLabel] = useState('');
 
   const [date, setDate] = useState(dayjs(''));
 
@@ -54,7 +54,7 @@ const App = () => {
   const [comment, setComment] = useState('');
 
   function storageAndShowData(): void {
-    if (label1 && label2 && label3 && date) {
+    if (towerLabel && floorLabel && meetingRoomLabel && date) {
       if (endTime.diff(startTime) > 0) {
         let data = {
           tower: '',
@@ -65,9 +65,9 @@ const App = () => {
           startTime: '',
           endTime: ''
         }
-        data.tower = label1;
-        data.floor = label2;
-        data.meetingRoom = label3;
+        data.tower = towerLabel;
+        data.floor = floorLabel;
+        data.meetingRoom = meetingRoomLabel;
         data.startTime = startTime?.add(3, 'hours').toJSON().slice(11, 19);
         data.endTime = endTime?.add(3, 'hours').toJSON().slice(11, 19);
         data.comment = comment ? comment : 'Нет комментария'
@@ -85,9 +85,9 @@ const App = () => {
   }
   const handleClear = (e: any) => {
     e.preventDefault()
-    setLabel1('');
-    setLabel2('');
-    setLabel3('');
+    setTowerLabel('');
+    setFloorLabel('');
+    setMeetingRoomLabel('');
     setComment('');
     setDate(dayjs(''));
     setStartTime(dayjs(''));
@@ -98,7 +98,7 @@ const App = () => {
   return (
     <div className='App'>
       <Header> Выбор Переговорной</Header>
-      <Dropdown label={label1 ? label1 : 'Выберите башню'} onChange={(item) => setLabel1(item.label)}>
+      <Dropdown label={towerLabel ? towerLabel : 'Выберите башню'} onChange={(item) => setTowerLabel(item.label)}>
         {
           towers.map(item => (
             <MenuItem key={item.value} value={item}>
@@ -107,7 +107,7 @@ const App = () => {
           ))
         }
       </Dropdown>
-      <Dropdown label={label2 ? label2 : 'Выберите этаж'} onChange={(item) => setLabel2(item.label)}>
+      <Dropdown label={floorLabel ? floorLabel : 'Выберите этаж'} onChange={(item) => setFloorLabel(item.label)}>
         {
           floors.map(item => (
             <MenuItem key={item.value} value={item}>
@@ -116,7 +116,7 @@ const App = () => {
           ))
         }
       </Dropdown>
-      <Dropdown label={label3 ? label3 : 'Выберите переговорную'} onChange={(item) => setLabel3(item.label)}>
+      <Dropdown label={meetingRoomLabel ? meetingRoomLabel : 'Выберите переговорную'} onChange={(item) => setMeetingRoomLabel(item.label)}>
         {
           meetingRooms.map(item => (
             <MenuItem key={item.value} value={item}>
