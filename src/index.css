@@ -40,3 +40,9 @@ code {
   align-self: center;
   background-color: #abd5d5;
 }
+
+.timeStuff {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

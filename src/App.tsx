@@ -125,18 +125,20 @@ const App = () => {
           ))
         }
       </Dropdown>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
-        <DatePicker sx={{ margin: '10px' }} className='datePicker' value={date} onChange={(value) => setDate(value ? value : date)} />
-        <TimePicker sx={{ margin: '10px' }} className='timePicker'
-          label="Время начала"
-          defaultValue={startTime}
-          value={startTime}
-          onChange={(value) => setStartTime(value ? value : startTime)}
-        />
-        <TimePicker sx={{ margin: '10px' }} className='timePicker' label="Время завершения"
-          defaultValue={endTime}
-          value={endTime}
-          onChange={(value) => setEndTime(value ? value : endTime)} />
+      <LocalizationProvider className='LocalizationProvider' dateAdapter={AdapterDayjs} adapterLocale="ru">
+        <div className="timeStuff">
+          <DatePicker sx={{ margin: '10px' }} className='datePicker' value={date} onChange={(value) => setDate(value ? value : date)} />
+          <TimePicker sx={{ margin: '10px' }} className='timePicker'
+            label="Время начала"
+            defaultValue={startTime}
+            value={startTime}
+            onChange={(value) => setStartTime(value ? value : startTime)}
+          />
+          <TimePicker sx={{ margin: '10px' }} className='timePicker' label="Время завершения"
+            defaultValue={endTime}
+            value={endTime}
+            onChange={(value) => setEndTime(value ? value : endTime)} />
+        </div>
       </LocalizationProvider>
       <TextArea value={comment} placeholder='Введите комментарий' onChange={(e) => { setComment(e.target.value) }}></TextArea>
       <Button onClick={storageAndShowData}>Отправить</Button>
@@ -166,6 +168,8 @@ const Button = styled.button`
   align-self: center;
   margin: 1%;
   border-radius: 10px;
+  background-color: #abd5d5;
+  font-size: large;
 `
 
 
